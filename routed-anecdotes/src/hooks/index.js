@@ -11,13 +11,7 @@ export const useField = (name, type = 'text') => {
         setValue('')
     }
 
-    const resetName = `reset${name.charAt(0).toUpperCase() + name.slice(1)}`
+    const props = {type, name, value, onChange}
 
-    return {
-        type,
-        name,
-        value,
-        onChange,
-        [resetName]: reset
-    }
+    return [props, reset]
 }
