@@ -44,3 +44,8 @@ Temporary Items
 # Ignore all local history of files
 .history
 .ionide
+
+example
+webpack-example
+server-test
+.env
