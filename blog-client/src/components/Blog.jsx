@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
+import { useDispatch } from 'react-redux'
+import { likeABlog, deleteABlog } from '../reducers/blogReducer'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, user, updater, successMessage, errorMessage }) => {
+const Blog = ({ blog, user }) => {
   const blogStyle = {
     marginBottom: 10,
     paddingLeft: 5,
@@ -12,65 +13,53 @@ const Blog = ({ blog, user, updater, successMessage, errorMessage }) => {
   }
   const [showDetails, setShowDetails] = useState(false)
   const [liked, setLiked] = useState(undefined)
-  const [blogData, setBlogData] = useState({
-    id: blog.id,
-    title: blog.title,
-    author: blog.author,
-    url: blog.url,
-    likes: blog.likes
-  })
-  const { title, author, url, likes, id } = blogData
+  const dispatch = useDispatch()
 
   const handleShowDetails = () => {
     setShowDetails(!showDetails)
   }
 
+  const likeMessage = (message) => {
+    setLiked(message)
+    setTimeout(() => {
+      setLiked(undefined)
+    }, 3000)
+  }
+
   const updateLikes = async () => {
-    try {
-      const newLikes = likes + 1
-      const response = await blogService.update({
-        title,
-        author,
-        url,
-        likes: newLikes,
-        id
-      })
-      if (response) {
-        setBlogData({ ...blogData, likes: likes + 1 })
-        setLiked('Liked!')
-        setTimeout(() => {
-          setLiked(undefined)
-        }, 3000)
-      }
-    } catch (exception) {
-      setLiked('Something went wrong')
-      setTimeout(() => {
-        setLiked(undefined)
-      }, 3000)
+    const res = await dispatch(
+      likeABlog(blog.title, blog.author, blog.url, blog.likes, blog.id)
+    )
+    if (res) {
+      likeMessage('Liked!')
+    } else {
+      likeMessage('Something went wrong')
     }
+  }
+
+  const deleteBlog = async () => {
+    if (!window.confirm(`Delete blog ${blog.title} by ${blog.author}`)) {
+      return
+    }
+    dispatch(deleteABlog(blog.id, blog.title, blog.author))
   }
 
   const showLikedMessage = (message) => <span>{message}</span>
 
-  const deleteBlog = async () => {
-    if (!window.confirm(`Delete blog ${title} by ${author}`)) {
-      return
-    }
-    try {
-      const response = await blogService.deleteOne(id)
-      if (response.status === 204) {
-        updater()
-        successMessage(`Blog ${title} by ${author} deleted`)
-      }
-    } catch {
-      errorMessage()
-    }
-  }
+  const deleteButton = () => (
+    <>
+      <span>
+        <button className='blog-delete-button' onClick={deleteBlog}>
+          Delete
+        </button>
+      </span>
+    </>
+  )
 
   return (
     <div className='blog-container' style={blogStyle}>
       <p>
-        <b>{title}</b> by {author}
+        <b>{blog.title}</b> by {blog.author}
         <button
           className='view-hide-blog-details'
           type='button'
@@ -80,9 +69,9 @@ const Blog = ({ blog, user, updater, successMessage, errorMessage }) => {
       </p>
       {showDetails ? (
         <p>
-          <b>URL:</b> {url}
+          <b>URL:</b> {blog.url}
           <br />
-          <b>Likes:</b> {likes}
+          <b>Likes:</b> {blog.likes}
           <span>
             <button
               className='blog-like-button'
@@ -91,17 +80,11 @@ const Blog = ({ blog, user, updater, successMessage, errorMessage }) => {
               Like
             </button>
           </span>
-          {liked === undefined ? null : showLikedMessage(liked)}
+          {liked ? showLikedMessage(liked) : null}
           <br />
           <b>Added by:</b> {blog.user.name}
           <br />
-          {user.username === blog.user.username ? (
-            <span>
-              <button className='blog-delete-button' onClick={deleteBlog}>
-                Delete
-              </button>
-            </span>
-          ) : null}
+          {user.username === blog.user.username ? deleteButton() : null}
         </p>
       ) : null}
     </div>
@@ -110,10 +93,7 @@ const Blog = ({ blog, user, updater, successMessage, errorMessage }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  updater: PropTypes.func.isRequired,
-  successMessage: PropTypes.func.isRequired,
-  errorMessage: PropTypes.func.isRequired
+  user: PropTypes.object.isRequired
 }
 
 export default Blog

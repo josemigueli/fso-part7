@@ -10,7 +10,10 @@ const loginRouter = require('./controllers/login')
 const mongoose = require('mongoose')
 const middleware = require('./utils/middleware')
 
-mongoose.connect(config.MONGODB_URI)
+mongoose.connect(config.MONGODB_URI).then(
+  () => console.log('Connected to the database'),
+  (error) => console.log(`Couldn't connect to the database. Error: ${error.message}`)
+)
 
 app.use(cors())
 app.use(express.json())

@@ -1,68 +1,46 @@
-import { useState } from 'react'
-import blogService from '../services/blogs'
+import { useDispatch } from 'react-redux'
+import { useField } from '../hooks'
+import { createNewBlog } from '../reducers/blogReducer'
 import PropTypes from 'prop-types'
 
-const CreateNewBlog = ({ updater, successMessage, errorMessage }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+const CreateNewBlog = ({ updater }) => {
+  const [title, resetTitle] = useField()
+  const [author, resetAuthor] = useField()
+  const [url, resetUrl] = useField()
+  const dispatch = useDispatch()
 
   const handleCreateBlog = async (e) => {
     e.preventDefault()
 
-    try {
-      await blogService.create({
-        title,
-        author,
-        url
-      })
+    const res = await dispatch(
+      createNewBlog(title.value, author.value, url.value)
+    )
+
+    if (res) {
       updater()
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      successMessage(`Blog ${title} by ${author} added`)
-    } catch (exception) {
-      errorMessage()
+      resetTitle()
+      resetAuthor()
+      resetUrl()
     }
   }
 
   return (
     <div>
+      <h2>Create new blog</h2>
       <form onSubmit={handleCreateBlog}>
         <div>
           <label htmlFor='title'>Title</label>
-          <input
-            type='text'
-            placeholder='Title'
-            name='title'
-            id='title'
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
+          <input id='title' placeholder='Title' name='title' {...title} />
         </div>
 
         <div>
           <label htmlFor='author'>Author</label>
-          <input
-            type='text'
-            placeholder='Author'
-            name='author'
-            id='author'
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
+          <input id='author' placeholder='Author' name='author' {...author} />
         </div>
 
         <div>
           <label htmlFor='url'>Url</label>
-          <input
-            type='text'
-            placeholder='URL'
-            name='url'
-            id='url'
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
+          <input id='url' placeholder='URL' name='url' {...url} />
         </div>
         <button id='save-blog-button' type='submit'>
           Create
@@ -73,9 +51,7 @@ const CreateNewBlog = ({ updater, successMessage, errorMessage }) => {
 }
 
 CreateNewBlog.propTypes = {
-  updater: PropTypes.func.isRequired,
-  successMessage: PropTypes.func.isRequired,
-  errorMessage: PropTypes.func.isRequired
+  updater: PropTypes.func.isRequired
 }
 
 export default CreateNewBlog

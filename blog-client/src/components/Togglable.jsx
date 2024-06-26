@@ -1,10 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
+import { useLogin } from '../hooks'
 import PropTypes from 'prop-types'
 
 const Togglable = (props) => {
   const [visible, setVisible] = useState(false)
   const hideVisible = { display: visible ? 'none' : '' }
   const showVisible = { display: visible ? '' : 'none' }
+  const [user, ...logging] = useLogin()
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -14,9 +17,11 @@ const Togglable = (props) => {
     if (visible) {
       toggleVisibility()
     }
-    //I tried to solve the ESLint warning for this but adding the missing dependencies cause a bug in the app. I'm sure this is not causing any problems in the app.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.hide])
+
+  if (!user) {
+    return null
+  }
 
   return (
     <div>
