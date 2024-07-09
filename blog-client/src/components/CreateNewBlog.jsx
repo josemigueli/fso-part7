@@ -1,29 +1,40 @@
-import { useState } from 'react'
-import blogService from '../services/blogs'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useNotify } from '../NotificationContext'
+import { useField } from '../hooks'
+import { createBlog } from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const CreateNewBlog = ({ updater, successMessage, errorMessage }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+const CreateNewBlog = ({ updater }) => {
+  const [title, resetTitle] = useField()
+  const [author, resetAuthor] = useField()
+  const [url, resetUrl] = useField()
+  const notify = useNotify()
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: createBlog,
+    onSuccess: (blog) => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      queryClient.setQueryData(['blogs'], blogs.concat(blog))
+      updater()
+      resetTitle()
+      resetAuthor()
+      resetUrl()
+      notify(`Blog ${title.value} by ${author.value} added`)
+    },
+    onError: (err) => {
+      const erroMessage = err.response.data.error
+      notify(erroMessage, 'ERROR')
+    }
+  })
 
   const handleCreateBlog = async (e) => {
     e.preventDefault()
-
-    try {
-      await blogService.create({
-        title,
-        author,
-        url
-      })
-      updater()
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      successMessage(`Blog ${title} by ${author} added`)
-    } catch (exception) {
-      errorMessage()
-    }
+    mutation.mutate({
+      title: title.value,
+      author: author.value,
+      url: url.value
+    })
   }
 
   return (
@@ -31,38 +42,17 @@ const CreateNewBlog = ({ updater, successMessage, errorMessage }) => {
       <form onSubmit={handleCreateBlog}>
         <div>
           <label htmlFor='title'>Title</label>
-          <input
-            type='text'
-            placeholder='Title'
-            name='title'
-            id='title'
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
+          <input id='title' placeholder='Title' name='title' {...title} />
         </div>
 
         <div>
           <label htmlFor='author'>Author</label>
-          <input
-            type='text'
-            placeholder='Author'
-            name='author'
-            id='author'
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
+          <input id='author' placeholder='Author' name='author' {...author} />
         </div>
 
         <div>
           <label htmlFor='url'>Url</label>
-          <input
-            type='text'
-            placeholder='URL'
-            name='url'
-            id='url'
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
+          <input id='url' placeholder='URL' name='url' {...url} />
         </div>
         <button id='save-blog-button' type='submit'>
           Create
@@ -73,9 +63,7 @@ const CreateNewBlog = ({ updater, successMessage, errorMessage }) => {
 }
 
 CreateNewBlog.propTypes = {
-  updater: PropTypes.func.isRequired,
-  successMessage: PropTypes.func.isRequired,
-  errorMessage: PropTypes.func.isRequired
+  updater: PropTypes.func.isRequired
 }
 
 export default CreateNewBlog

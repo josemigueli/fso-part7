@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import { useNotify } from '../NotificationContext'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, user, updater, successMessage, errorMessage }) => {
+const Blog = ({ blog, user, updater }) => {
   const blogStyle = {
     marginBottom: 10,
     paddingLeft: 5,
@@ -20,9 +21,17 @@ const Blog = ({ blog, user, updater, successMessage, errorMessage }) => {
     likes: blog.likes
   })
   const { title, author, url, likes, id } = blogData
+  const notify = useNotify()
 
   const handleShowDetails = () => {
     setShowDetails(!showDetails)
+  }
+
+  const setLikedMessage = (message) => {
+    setLiked(message)
+    setTimeout(() => {
+      setLiked(undefined)
+    }, 3000)
   }
 
   const updateLikes = async () => {
@@ -37,16 +46,10 @@ const Blog = ({ blog, user, updater, successMessage, errorMessage }) => {
       })
       if (response) {
         setBlogData({ ...blogData, likes: likes + 1 })
-        setLiked('Liked!')
-        setTimeout(() => {
-          setLiked(undefined)
-        }, 3000)
+        setLikedMessage('Liked!')
       }
     } catch (exception) {
-      setLiked('Something went wrong')
-      setTimeout(() => {
-        setLiked(undefined)
-      }, 3000)
+      setLikedMessage('Something went wrong')
     }
   }
 
@@ -60,10 +63,10 @@ const Blog = ({ blog, user, updater, successMessage, errorMessage }) => {
       const response = await blogService.deleteOne(id)
       if (response.status === 204) {
         updater()
-        successMessage(`Blog ${title} by ${author} deleted`)
+        notify(`Blog ${title} by ${author} deleted`)
       }
     } catch {
-      errorMessage()
+      notify('Something went wrong', 'ERROR')
     }
   }
 
@@ -111,9 +114,7 @@ const Blog = ({ blog, user, updater, successMessage, errorMessage }) => {
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  updater: PropTypes.func.isRequired,
-  successMessage: PropTypes.func.isRequired,
-  errorMessage: PropTypes.func.isRequired
+  updater: PropTypes.func.isRequired
 }
 
 export default Blog
