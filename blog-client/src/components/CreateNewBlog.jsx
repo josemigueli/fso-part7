@@ -1,40 +1,29 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNotify } from '../NotificationContext'
 import { useField } from '../hooks'
-import { createBlog } from '../services/blogs'
+import { useBlogQuery } from '../hooks'
 import PropTypes from 'prop-types'
 
 const CreateNewBlog = ({ updater }) => {
   const [title, resetTitle] = useField()
   const [author, resetAuthor] = useField()
   const [url, resetUrl] = useField()
-  const notify = useNotify()
-  const queryClient = useQueryClient()
 
-  const mutation = useMutation({
-    mutationFn: createBlog,
-    onSuccess: (blog) => {
-      const blogs = queryClient.getQueryData(['blogs'])
-      queryClient.setQueryData(['blogs'], blogs.concat(blog))
-      updater()
-      resetTitle()
-      resetAuthor()
-      resetUrl()
-      notify(`Blog ${title.value} by ${author.value} added`)
-    },
-    onError: (err) => {
-      const erroMessage = err.response.data.error
-      notify(erroMessage, 'ERROR')
-    }
-  })
+  const [createABlog, updateABlog, deleteABlog] = useBlogQuery()
 
   const handleCreateBlog = async (e) => {
     e.preventDefault()
-    mutation.mutate({
+
+    const res = await createABlog({
       title: title.value,
       author: author.value,
       url: url.value
     })
+
+    if (res) {
+      updater()
+      resetTitle()
+      resetAuthor()
+      resetUrl()
+    }
   }
 
   return (

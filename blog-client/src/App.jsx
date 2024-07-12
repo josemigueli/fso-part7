@@ -9,12 +9,10 @@ import CreateNewBlog from './components/CreateNewBlog'
 import BlogsList from './components/BlogsList'
 
 const App = () => {
-  const [updateList, setUpdateList] = useState(true)
   const [hideBlogForm, setHideBlogForm] = useState(false)
   const retrieve = useUserRetrieve()
 
-  const updateAndHide = () => {
-    setUpdateList(!updateList)
+  const handlerHide = () => {
     setHideBlogForm(!hideBlogForm)
   }
 
@@ -29,7 +27,7 @@ const App = () => {
       <LoginForm />
       <Togglable buttonLabel='Create blog' hide={hideBlogForm}>
         <h2>Create new blog</h2>
-        <CreateNewBlog updater={updateAndHide} />
+        <CreateNewBlog updater={handlerHide} />
       </Togglable>
       <BlogsList />
     </div>

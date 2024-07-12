@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { useNotify } from '../NotificationContext'
-import blogService from '../services/blogs'
+import { useBlogQuery } from '../hooks'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, user, updater }) => {
+const Blog = ({ blog, user }) => {
   const blogStyle = {
     marginBottom: 10,
     paddingLeft: 5,
@@ -12,68 +11,44 @@ const Blog = ({ blog, user, updater }) => {
     borderColor: '#000'
   }
   const [showDetails, setShowDetails] = useState(false)
-  const [liked, setLiked] = useState(undefined)
-  const [blogData, setBlogData] = useState({
-    id: blog.id,
-    title: blog.title,
-    author: blog.author,
-    url: blog.url,
-    likes: blog.likes
-  })
-  const { title, author, url, likes, id } = blogData
-  const notify = useNotify()
+  const [createABlog, updateABlog, deleteABlog] = useBlogQuery()
 
   const handleShowDetails = () => {
     setShowDetails(!showDetails)
   }
 
-  const setLikedMessage = (message) => {
-    setLiked(message)
-    setTimeout(() => {
-      setLiked(undefined)
-    }, 3000)
+  const updateLikes = () => {
+    const newLikes = blog.likes + 1
+    updateABlog({
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: newLikes,
+      id: blog.id
+    })
   }
-
-  const updateLikes = async () => {
-    try {
-      const newLikes = likes + 1
-      const response = await blogService.update({
-        title,
-        author,
-        url,
-        likes: newLikes,
-        id
-      })
-      if (response) {
-        setBlogData({ ...blogData, likes: likes + 1 })
-        setLikedMessage('Liked!')
-      }
-    } catch (exception) {
-      setLikedMessage('Something went wrong')
-    }
-  }
-
-  const showLikedMessage = (message) => <span>{message}</span>
 
   const deleteBlog = async () => {
-    if (!window.confirm(`Delete blog ${title} by ${author}`)) {
+    if (!window.confirm(`Delete blog ${blog.title} by ${blog.author}`)) {
       return
     }
-    try {
-      const response = await blogService.deleteOne(id)
-      if (response.status === 204) {
-        updater()
-        notify(`Blog ${title} by ${author} deleted`)
-      }
-    } catch {
-      notify('Something went wrong', 'ERROR')
-    }
+    deleteABlog(blog.id, blog.title, blog.author)
   }
+
+  const deleteButton = () => (
+    <>
+      <span>
+        <button className='blog-delete-button' onClick={deleteBlog}>
+          Delete
+        </button>
+      </span>
+    </>
+  )
 
   return (
     <div className='blog-container' style={blogStyle}>
       <p>
-        <b>{title}</b> by {author}
+        <b>{blog.title}</b> by {blog.author}
         <button
           className='view-hide-blog-details'
           type='button'
@@ -83,9 +58,9 @@ const Blog = ({ blog, user, updater }) => {
       </p>
       {showDetails ? (
         <p>
-          <b>URL:</b> {url}
+          <b>URL:</b> {blog.url}
           <br />
-          <b>Likes:</b> {likes}
+          <b>Likes:</b> {blog.likes}
           <span>
             <button
               className='blog-like-button'
@@ -94,17 +69,10 @@ const Blog = ({ blog, user, updater }) => {
               Like
             </button>
           </span>
-          {liked === undefined ? null : showLikedMessage(liked)}
           <br />
           <b>Added by:</b> {blog.user.name}
           <br />
-          {user.username === blog.user.username ? (
-            <span>
-              <button className='blog-delete-button' onClick={deleteBlog}>
-                Delete
-              </button>
-            </span>
-          ) : null}
+          {user.username === blog.user.username ? deleteButton() : null}
         </p>
       ) : null}
     </div>
@@ -113,8 +81,7 @@ const Blog = ({ blog, user, updater }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  updater: PropTypes.func.isRequired
+  user: PropTypes.object.isRequired
 }
 
 export default Blog
