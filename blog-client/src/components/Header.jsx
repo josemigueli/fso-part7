@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useLogin } from '../hooks'
 
 const Header = () => {
@@ -5,6 +6,8 @@ const Header = () => {
 
   const loggedInContent = () => (
     <>
+      <Link to='/'>Blogs</Link>
+      <Link to='/users'>Users</Link>
       <p>
         {user.name} logged in <button onClick={handleLogout}>Logout</button>
       </p>
@@ -17,8 +20,8 @@ const Header = () => {
 
   return (
     <>
-      <h1>Blog List App</h1>
       {user ? loggedInContent() : null}
+      <h1>Blog List App</h1>
     </>
   )
 }

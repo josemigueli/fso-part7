@@ -77,8 +77,10 @@ export const deleteABlog = (id, title, author) => {
       dispatch(
         displayNotification('success', `Blog ${title} by ${author} deleted`, 5)
       )
+      return true
     } catch (err) {
       dispatch(displayNotification('error', 'Something went wrong', 5))
+      return false
     }
   }
 }

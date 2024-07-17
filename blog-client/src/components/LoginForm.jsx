@@ -1,9 +1,12 @@
+import { useEffect } from 'react'
 import { useField, useLogin } from '../hooks'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm = () => {
   const [username, resetUsername] = useField()
   const [password, resetPassword] = useField('password')
   const [user, ...logging] = useLogin()
+  const navigate = useNavigate()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -13,6 +16,12 @@ const LoginForm = () => {
       resetPassword()
     }
   }
+
+  useEffect(() => {
+    if (user) {
+      navigate('/')
+    }
+  })
 
   if (user) {
     return null

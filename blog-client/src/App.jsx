@@ -1,20 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useLogin } from './hooks'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Notification from './components/Notification'
 import Header from './components/Header'
 import LoginForm from './components/LoginForm'
-import Togglable from './components/Togglable'
-import CreateNewBlog from './components/CreateNewBlog'
 import BlogsList from './components/BlogsList'
+import Users from './components/Users'
+import UserView from './components/UserView'
+import BlogView from './components/BlogView'
 
 const App = () => {
-  const [hideBlogForm, setHideBlogForm] = useState(false)
   const [user, ...logging] = useLogin()
-
-  const updateAndHide = () => {
-    setHideBlogForm(!hideBlogForm)
-  }
 
   useEffect(() => {
     logging[0].retrieve()
@@ -24,11 +21,13 @@ const App = () => {
     <div>
       <Notification />
       <Header />
-      <LoginForm />
-      <Togglable buttonLabel='Create blog' hide={hideBlogForm}>
-        <CreateNewBlog updater={updateAndHide} />
-      </Togglable>
-      <BlogsList />
+      <Routes>
+        <Route path='/' element={<BlogsList />} />
+        <Route path='/login' element={<LoginForm />} />
+        <Route path='/blogs/:id' element={<BlogView />} />
+        <Route path='/users' element={<Users />} />
+        <Route path='/users/:id' element={<UserView />} />
+      </Routes>
     </div>
   )
 }
