@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
-import { likeABlog, deleteABlog } from '../reducers/blogReducer'
+import { likeABlog, deleteABlog, commentABlog } from '../reducers/blogReducer'
 import { useLogin } from '../hooks'
+import { useField } from '../hooks'
 
 const BlogView = () => {
   const dispatch = useDispatch()
   const [liked, setLiked] = useState(undefined)
   const navigate = useNavigate()
   const [user, ...logging] = useLogin()
+  const [comment, resetComment] = useField()
   const blogs = useSelector((state) => state.blogs)
   const { id } = useParams()
   const blogData = blogs.filter((b) => {
@@ -68,6 +70,27 @@ const BlogView = () => {
     </>
   )
 
+  const commentBlog = async () => {
+    const res = await dispatch(commentABlog(comment.value, blogData[0].id))
+    if (res) {
+      resetComment()
+    }
+  }
+
+  const showComments = () => (
+    <>
+      {blogData[0].comments.length > 0 ? (
+        <ul>
+          {blogData[0].comments.map((comment) => (
+            <li key={comment.id}>{comment.content}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No comments yet</p>
+      )}
+    </>
+  )
+
   useEffect(() => {
     if (!user || blogData.length < 1) {
       navigate('/')
@@ -99,6 +122,14 @@ const BlogView = () => {
         <br />
         {user.username === blogData[0].user.username ? deleteButton() : null}
       </p>
+      <h3>Comments</h3>
+      <div>
+        <input {...comment} placeholder='Comment...' />
+        <button type='button' onClick={commentBlog}>
+          Add a comment
+        </button>
+      </div>
+      {showComments()}
     </>
   )
 }
