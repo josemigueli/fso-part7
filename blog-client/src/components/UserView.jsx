@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useLogin } from '../hooks'
+import Container from 'react-bootstrap/esm/Container'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 const UserView = () => {
   const users = useSelector((state) => state.users)
@@ -12,14 +14,14 @@ const UserView = () => {
     return u.id === id
   })
 
-  const noBlogsMessage = () => <p>No blogs yet</p>
+  const noBlogsMessage = () => <p>No blogs yet...</p>
 
   const showBlogs = () => (
-    <ul>
+    <ListGroup variant='flush'>
       {userData[0].blogs.map((b) => (
-        <li key={b.id}>{b.title}</li>
+        <ListGroup.Item key={b.id}>{b.title}</ListGroup.Item>
       ))}
-    </ul>
+    </ListGroup>
   )
 
   useEffect(() => {
@@ -33,11 +35,13 @@ const UserView = () => {
   }
 
   return (
-    <>
+    <Container className='my-5'>
       <h2>{userData[0].name}</h2>
-      <h3>Added blogs</h3>
-      {userData[0].blogs.length > 0 ? showBlogs() : noBlogsMessage()}
-    </>
+      <div className='border border-light-subtle rounded p-4'>
+        <h3>Added blogs</h3>
+        {userData[0].blogs.length > 0 ? showBlogs() : noBlogsMessage()}
+      </div>
+    </Container>
   )
 }
 

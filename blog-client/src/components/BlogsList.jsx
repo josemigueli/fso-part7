@@ -6,15 +6,10 @@ import { initializeBlogs } from '../reducers/blogReducer'
 import { useLogin } from '../hooks'
 import Togglable from './Togglable'
 import CreateNewBlog from './CreateNewBlog'
+import Container from 'react-bootstrap/esm/Container'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 const BlogsList = () => {
-  const blogStyle = {
-    marginBottom: 10,
-    paddingLeft: 5,
-    border: 'solid',
-    borderWitdth: 1,
-    borderColor: '#000'
-  }
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
   const [user, ...logging] = useLogin()
@@ -40,23 +35,23 @@ const BlogsList = () => {
   }
 
   return (
-    <>
-      <Togglable buttonLabel='Create blog' hide={hideBlogForm}>
+    <Container className='my-5'>
+      <Togglable buttonLabel='Create New Blog' hide={hideBlogForm}>
         <CreateNewBlog updater={updateAndHide} />
       </Togglable>
 
       <h2>Blogs</h2>
 
-      {blogs.map((blog) => (
-        <div className='blog-container' style={blogStyle} key={blog.id}>
-          <p>
-            <Link to={`/blogs/${blog.id}`}>
+      <ListGroup as='ul'>
+        {blogs.map((blog) => (
+          <ListGroup.Item as='li' key={blog.id}>
+            <Link to={`/blogs/${blog.id}`} className='text-decoration-none'>
               <b>{blog.title}</b>
             </Link>
-          </p>
-        </div>
-      ))}
-    </>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    </Container>
   )
 }
 

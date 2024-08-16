@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useLogin } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeUsers } from '../reducers/usersReducer'
+import Container from 'react-bootstrap/esm/Container'
+import Table from 'react-bootstrap/Table'
 
 const Users = () => {
   const dispatch = useDispatch()
@@ -26,9 +28,9 @@ const Users = () => {
   }
 
   return (
-    <>
+    <Container className='mt-5'>
       <h2>Users</h2>
-      <table>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>User</th>
@@ -45,8 +47,8 @@ const Users = () => {
             </tr>
           ))}
         </tbody>
-      </table>
-    </>
+      </Table>
+    </Container>
   )
 }
 

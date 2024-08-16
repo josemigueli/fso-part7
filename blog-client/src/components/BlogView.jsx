@@ -5,6 +5,11 @@ import { useDispatch } from 'react-redux'
 import { likeABlog, deleteABlog, commentABlog } from '../reducers/blogReducer'
 import { useLogin } from '../hooks'
 import { useField } from '../hooks'
+import Container from 'react-bootstrap/esm/Container'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/esm/Button'
+import Card from 'react-bootstrap/Card'
 
 const BlogView = () => {
   const dispatch = useDispatch()
@@ -42,7 +47,7 @@ const BlogView = () => {
     }
   }
 
-  const showLikedMessage = (message) => <span>{message}</span>
+  const showLikedMessage = (message) => <span className='ms-2'>{message}</span>
 
   const deleteBlog = async () => {
     if (
@@ -63,14 +68,18 @@ const BlogView = () => {
   const deleteButton = () => (
     <>
       <span>
-        <button className='blog-delete-button' onClick={deleteBlog}>
+        <Button
+          className='blog-delete-button ms-3'
+          onClick={deleteBlog}
+          variant='danger'>
           Delete
-        </button>
+        </Button>
       </span>
     </>
   )
 
-  const commentBlog = async () => {
+  const commentBlog = async (event) => {
+    event.preventDefault()
     const res = await dispatch(commentABlog(comment.value, blogData[0].id))
     if (res) {
       resetComment()
@@ -80,11 +89,13 @@ const BlogView = () => {
   const showComments = () => (
     <>
       {blogData[0].comments.length > 0 ? (
-        <ul>
+        <ListGroup as='ul' variant='flush'>
           {blogData[0].comments.map((comment) => (
-            <li key={comment.id}>{comment.content}</li>
+            <ListGroup.Item as='li' key={comment.id}>
+              {comment.content}
+            </ListGroup.Item>
           ))}
-        </ul>
+        </ListGroup>
       ) : (
         <p>No comments yet</p>
       )}
@@ -102,35 +113,41 @@ const BlogView = () => {
   }
 
   return (
-    <>
-      <h2>{blogData[0].title}</h2>
-      <p>
-        <a href={blogData[0].url}>{blogData[0].url}</a>
-        <br />
-        {blogData[0].likes} Likes
-        <span>
-          <button
+    <Container className='my-5'>
+      <Card className='mb-5'>
+        <Card.Header>Added by {blogData[0].author}</Card.Header>
+        <Card.Body>
+          <Card.Title>{blogData[0].title}</Card.Title>
+          <Card.Text>
+            <a href={blogData[0].url}>{blogData[0].url}</a>
+          </Card.Text>
+          <Card.Text>
+            {blogData[0].likes} Likes {liked ? showLikedMessage(liked) : null}
+          </Card.Text>
+          <Button
             className='blog-like-button'
             type='button'
-            onClick={updateLikes}>
+            onClick={updateLikes}
+            variant='primary'>
             Like
-          </button>
-        </span>
-        {liked ? showLikedMessage(liked) : null}
-        <br />
-        Added by {blogData[0].author}
-        <br />
-        {user.username === blogData[0].user.username ? deleteButton() : null}
-      </p>
-      <h3>Comments</h3>
-      <div>
-        <input {...comment} placeholder='Comment...' />
-        <button type='button' onClick={commentBlog}>
-          Add a comment
-        </button>
+          </Button>
+
+          {user.username === blogData[0].user.username ? deleteButton() : null}
+        </Card.Body>
+      </Card>
+      <div className='mb-3'>
+        <h3>Comments</h3>
+        <Form onSubmit={commentBlog}>
+          <Form.Group className='mb-3'>
+            <Form.Control {...comment} placeholder='Comment...' />
+          </Form.Group>
+          <Button type='submit' variant='primary'>
+            Add a comment
+          </Button>
+        </Form>
       </div>
       {showComments()}
-    </>
+    </Container>
   )
 }
 

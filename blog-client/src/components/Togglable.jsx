@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useLogin } from '../hooks'
 import PropTypes from 'prop-types'
+import Button from 'react-bootstrap/esm/Button'
 
 const Togglable = (props) => {
   const [visible, setVisible] = useState(false)
@@ -25,14 +26,19 @@ const Togglable = (props) => {
 
   return (
     <div>
-      <div style={hideVisible}>
-        <button id='create-blog-button' onClick={toggleVisibility}>
+      <div style={hideVisible} className='mb-3 text-end'>
+        <Button
+          variant='primary'
+          id='create-blog-button'
+          onClick={toggleVisibility}>
           {props.buttonLabel}
-        </button>
+        </Button>
       </div>
-      <div style={showVisible}>
+      <div style={showVisible} className='mb-3 text-end'>
+        <Button className='mb-3' variant='secondary' onClick={toggleVisibility}>
+          Cancel
+        </Button>
         {props.children}
-        <button onClick={toggleVisibility}>Cancel</button>
       </div>
     </div>
   )

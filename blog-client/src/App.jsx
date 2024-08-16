@@ -9,6 +9,8 @@ import BlogsList from './components/BlogsList'
 import Users from './components/Users'
 import UserView from './components/UserView'
 import BlogView from './components/BlogView'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Container from 'react-bootstrap/esm/Container'
 
 const App = () => {
   const [user, ...logging] = useLogin()
@@ -18,7 +20,7 @@ const App = () => {
   }, [])
 
   return (
-    <div>
+    <Container>
       <Notification />
       <Header />
       <Routes>
@@ -28,7 +30,7 @@ const App = () => {
         <Route path='/users' element={<Users />} />
         <Route path='/users/:id' element={<UserView />} />
       </Routes>
-    </div>
+    </Container>
   )
 }
 

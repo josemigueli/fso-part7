@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 import { useField, useLogin } from '../hooks'
 import { useNavigate } from 'react-router-dom'
+import Container from 'react-bootstrap/esm/Container'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/esm/Button'
 
 const LoginForm = () => {
   const [username, resetUsername] = useField()
@@ -28,20 +31,26 @@ const LoginForm = () => {
   }
 
   return (
-    <>
-      <h2>Login to the application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor='username'>Username</label>
-          <input id='username' {...username} />
+    <Container className='mt-5'>
+      <div className='justify-content-center row'>
+        <div className='p-4 p-lg-5 border border-light-subtle rounded col-lg-5'>
+          <h2 className='text-center'>Login</h2>
+          <Form onSubmit={handleLogin}>
+            <Form.Group className='mb-3'>
+              <Form.Label>Username</Form.Label>
+              <Form.Control id='username' {...username} />
+            </Form.Group>
+            <Form.Group className='mb-3'>
+              <Form.Label>Password</Form.Label>
+              <Form.Control id='password' {...password} />
+            </Form.Group>
+            <Button variant='primary' type='submit' className='w-100'>
+              Login
+            </Button>
+          </Form>
         </div>
-        <div>
-          <label htmlFor='password'>Password</label>
-          <input id='password' {...password} />
-        </div>
-        <button type='submit'>Login</button>
-      </form>
-    </>
+      </div>
+    </Container>
   )
 }
 
