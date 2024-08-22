@@ -114,7 +114,7 @@ const BlogView = () => {
 
   return (
     <Container className='my-5'>
-      <Card className='mb-5'>
+      <Card className='blog-info-container mb-5'>
         <Card.Header>Added by {blogData[0].author}</Card.Header>
         <Card.Body>
           <Card.Title>{blogData[0].title}</Card.Title>

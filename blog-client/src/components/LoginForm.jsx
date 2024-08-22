@@ -44,7 +44,11 @@ const LoginForm = () => {
               <Form.Label>Password</Form.Label>
               <Form.Control id='password' {...password} />
             </Form.Group>
-            <Button variant='primary' type='submit' className='w-100'>
+            <Button
+              variant='primary'
+              type='submit'
+              className='w-100'
+              id='login-button'>
               Login
             </Button>
           </Form>

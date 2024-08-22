@@ -23,7 +23,7 @@ const Notification = () => {
   }
 
   return (
-    <>
+    <div className='notification-container'>
       {notification.type === 'error' ? (
         <ShowToast
           header='Error!'
@@ -37,7 +37,7 @@ const Notification = () => {
           type='success'
         />
       )}
-    </>
+    </div>
   )
 }
 export default Notification

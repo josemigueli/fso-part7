@@ -8,7 +8,9 @@ const blogSlice = createSlice({
   initialState: [],
   reducers: {
     setBlogs(state, action) {
-      return action.payload
+      const blogs = action.payload
+      const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
+      return sortedBlogs
     },
     appendBlog(state, action) {
       state.push(action.payload)

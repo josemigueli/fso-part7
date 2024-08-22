@@ -40,17 +40,19 @@ const BlogsList = () => {
         <CreateNewBlog updater={updateAndHide} />
       </Togglable>
 
-      <h2>Blogs</h2>
+      <div className='blogs-main-container'>
+        <h2>Blogs</h2>
 
-      <ListGroup as='ul'>
-        {blogs.map((blog) => (
-          <ListGroup.Item as='li' key={blog.id}>
-            <Link to={`/blogs/${blog.id}`} className='text-decoration-none'>
-              <b>{blog.title}</b>
-            </Link>
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
+        <ListGroup as='ul'>
+          {blogs.map((blog) => (
+            <ListGroup.Item as='li' key={blog.id} className='blog-container'>
+              <Link to={`/blogs/${blog.id}`} className='text-decoration-none'>
+                <b>{blog.title}</b>
+              </Link>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      </div>
     </Container>
   )
 }
