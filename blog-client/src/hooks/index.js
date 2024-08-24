@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createBlog, deleteBlog, updateBlog } from '../services/blogs'
+import { addComment } from '../services/comments'
 import { useNotify } from '../NotificationContext'
 
 export const useField = (type = 'text') => {
@@ -17,6 +18,44 @@ export const useField = (type = 'text') => {
   const props = { type, value, onChange }
 
   return [props, reset]
+}
+
+export const useAddCommentQuery = () => {
+  const queryClient = useQueryClient()
+  const notify = useNotify()
+
+  const commentMutation = useMutation({
+    mutationFn: addComment
+  })
+
+  const errorHandler = (err) => {
+    let errorMessage = err.response.data.error
+    if (!errorMessage) {
+      errorMessage = 'Something went wrong'
+    }
+    notify(errorMessage, 'ERROR')
+  }
+
+  const createComment = async (data) => {
+    const res = await commentMutation.mutateAsync(data, {
+      onSuccess: (comment) => {
+        const blogs = queryClient.getQueryData(['blogs'])
+        const newBlogs = blogs.map((b) =>
+          b.id !== comment.blog
+            ? b
+            : { ...b, comments: b.comments.concat(comment) }
+        )
+        queryClient.setQueryData(['blogs'], newBlogs)
+        notify('Comment added')
+      },
+      onError: (err) => {
+        errorHandler(err)
+      }
+    })
+    return res
+  }
+
+  return [createComment]
 }
 
 export const useBlogQuery = () => {
