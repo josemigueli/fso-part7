@@ -52,11 +52,11 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
   jwt.verify(request.token, process.env.SECRET)
 
   const { title, author, url, likes } = request.body
-  const user = request.user.id
+  const blogToUpdate = await Blog.findById(request.params.id)
 
   const updatedBlog = await Blog.findByIdAndUpdate(
     request.params.id,
-    { title, author, url, likes, user },
+    { title, author, url, likes, user: blogToUpdate.user },
     { new: true, runValidators: true, context: 'query' }
   )
 

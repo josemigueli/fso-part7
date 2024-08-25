@@ -42,7 +42,7 @@ const BlogsList = () => {
 
       <div className='blogs-main-container'>
         <h2>Blogs</h2>
-
+        {blogs.length < 1 ? <p>No blogs yet...</p> : null}
         <ListGroup as='ul'>
           {blogs.map((blog) => (
             <ListGroup.Item as='li' key={blog.id} className='blog-container'>
