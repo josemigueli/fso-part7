@@ -34,7 +34,7 @@ const BlogsList = () => {
   if (query.status === 'error') {
     return <div>Blog service not available due problems in server</div>
   }
-  const blogs = query.data
+  const blogs = query.data?.sort((a, b) => b.likes - a.likes)
 
   const handlerHide = () => {
     setHideBlogForm(!hideBlogForm)
