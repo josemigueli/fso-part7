@@ -107,6 +107,24 @@ A footer with references to the Full Stack Open course and the source code.
 
 This hook simplifies form input management by providing properties and functions for managing input values and resets.
 
+## Galery
+
+### Home View
+
+![Home view](public/home.png)
+
+### Anecdote View
+
+![Anecdote view](public/anecdote.png)
+
+### Create View
+
+![Create view](public/create.png)
+
+### About View
+
+![About view](public/about.png)
+
 ## License
 
 This project is developed as part of the Full Stack Open course and follows its licensing terms.
