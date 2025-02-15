@@ -127,7 +127,7 @@ noteService.create({ content: 'New note' })
   - `GET /persons`
   - `POST /persons`
 
-## Galery
+## Gallery
 
 ### Notes View
 

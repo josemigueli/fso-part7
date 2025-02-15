@@ -131,7 +131,7 @@ export const useCountry = (name) => {
 - [Axios](https://axios-http.com/)
 - [Vite](https://vitejs.dev/)
 
-## Galery
+## Gallery
 
 ### Home View
 

@@ -34,7 +34,7 @@ Routed Anecdotes is a simple web application that allows users to view, create, 
 
    ```bash
    git clone https://github.com/josemigueli/fso-part7.git
-   cd routed-anecdotes
+   cd fso-part7/routed-anecdotes
    ```
 
 2. Install dependencies:
@@ -107,7 +107,7 @@ A footer with references to the Full Stack Open course and the source code.
 
 This hook simplifies form input management by providing properties and functions for managing input values and resets.
 
-## Galery
+## Gallery
 
 ### Home View
 

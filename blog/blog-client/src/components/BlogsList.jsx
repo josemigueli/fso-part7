@@ -6,8 +6,6 @@ import { initializeBlogs } from '../reducers/blogReducer'
 import { useLogin } from '../hooks'
 import Togglable from './Togglable'
 import CreateNewBlog from './CreateNewBlog'
-import Container from 'react-bootstrap/esm/Container'
-import ListGroup from 'react-bootstrap/ListGroup'
 
 const BlogsList = () => {
   const dispatch = useDispatch()
@@ -30,30 +28,41 @@ const BlogsList = () => {
     }
   })
 
+  useEffect(() => {
+    document.title = 'Blog List - Home'
+  }, [])
+
   if (!user) {
     return null
   }
 
   return (
-    <Container className='my-5'>
-      <Togglable buttonLabel='Create New Blog' hide={hideBlogForm}>
+    <div className='max-w-7xl px-5'>
+      <Togglable buttonLabel='New Blog' hide={hideBlogForm}>
         <CreateNewBlog updater={updateAndHide} />
       </Togglable>
 
-      <div className='blogs-main-container'>
-        <h2>Blogs</h2>
+      <div className='mb-12'>
+        <h2 className='text-2xl font-bold mb-5'>Blogs</h2>
         {blogs.length < 1 ? <p>No blogs yet...</p> : null}
-        <ListGroup as='ul'>
+        <ul className='blogs-list'>
           {blogs.map((blog) => (
-            <ListGroup.Item as='li' key={blog.id} className='blog-container'>
-              <Link to={`/blogs/${blog.id}`} className='text-decoration-none'>
-                <b>{blog.title}</b>
+            <li
+              key={blog.id}
+              className='blog-container border border-zinc-700 rounded-lg my-5'>
+              <Link
+                to={`/blogs/${blog.id}`}
+                className='text-decoration-none hover:text-blue-500'>
+                <div className='py-4 px-6'>
+                  <p className='text-xl font-bold'>{blog.title}</p>
+                  <p className='text-zinc-400 text-sm'>by {blog.author}</p>
+                </div>
               </Link>
-            </ListGroup.Item>
+            </li>
           ))}
-        </ListGroup>
+        </ul>
       </div>
-    </Container>
+    </div>
   )
 }
 
