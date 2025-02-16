@@ -22,10 +22,6 @@ const ShowToast = ({ header, message, type }) => {
 
 const Notification = () => {
   const notification = useSelector((state) => state.notification)
-  // const notification = {
-  //   type: 'error',
-  //   message: 'Something went wrong!'
-  // }
 
   if (!notification) {
     return null
