@@ -48,4 +48,5 @@ Temporary Items
 example
 webpack-example
 server-test
+node_modules
 .env
