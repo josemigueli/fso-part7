@@ -1,17 +1,22 @@
 import { useNotificationValue } from '../NotificationContext'
-import Toast from 'react-bootstrap/Toast'
-import ToastContainer from 'react-bootstrap/ToastContainer'
 
 const ShowToast = ({ header, message, type }) => {
   return (
-    <ToastContainer className='p-3' position='top-center' style={{ zIndex: 1 }}>
-      <Toast bg={type}>
-        <Toast.Header closeButton={false}>
-          <strong className='me-auto'>{header}</strong>
-        </Toast.Header>
-        <Toast.Body className='text-white'>{message}</Toast.Body>
-      </Toast>
-    </ToastContainer>
+    <div className='fixed left-0 right-0 top-3 flex justify-center'>
+      <div
+        className={
+          type === 'error'
+            ? 'border border-zinc-700 rounded-lg py-2 max-w-3xs bg-red-950'
+            : 'border border-zinc-700 rounded-lg py-2 max-w-3xs bg-emerald-950'
+        }>
+        <div className='border-b border-zinc-500 px-4 pb-2'>
+          <h3 className='font-bold'>{header}</h3>
+        </div>
+        <div className='px-4 pt-2'>
+          <p>{message}</p>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -28,7 +33,7 @@ const Notification = () => {
         <ShowToast
           header='Error!'
           message={notification.message}
-          type='danger'
+          type='error'
         />
       ) : (
         <ShowToast

@@ -1,8 +1,7 @@
 import { useField } from '../hooks'
 import { useBlogQuery } from '../hooks'
 import PropTypes from 'prop-types'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/esm/Button'
+import { CiCirclePlus } from 'react-icons/ci'
 
 const CreateNewBlog = ({ updater }) => {
   const [title, resetTitle] = useField()
@@ -29,32 +28,51 @@ const CreateNewBlog = ({ updater }) => {
   }
 
   return (
-    <div>
-      <div className='justify-content-center row'>
-        <div className='p-4 p-lg-5 border border-light-subtle rounded col-lg-5'>
-          <h2 className='text-center'>Create new blog</h2>
-          <Form onSubmit={handleCreateBlog} className='text-start'>
-            <Form.Group className='mb-3'>
-              <Form.Label htmlFor='title'>Title</Form.Label>
-              <Form.Control id='title' name='title' {...title} />
-            </Form.Group>
-            <Form.Group className='mb-3'>
-              <Form.Label htmlFor='author'>Author</Form.Label>
-              <Form.Control id='author' name='author' {...author} />
-            </Form.Group>
-            <Form.Group className='mb-3'>
-              <Form.Label htmlFor='url'>Url</Form.Label>
-              <Form.Control id='url' name='url' {...url} />
-            </Form.Group>
-            <Button
-              id='save-blog-button'
-              type='submit'
-              variant='primary'
-              className='w-100'>
-              Create
-            </Button>
-          </Form>
-        </div>
+    <div className='flex justify-center'>
+      <div className='border border-zinc-700 rounded-lg p-8 md:w-xl'>
+        <h2 className='text-center text-2xl font-bold mb-5'>Create new blog</h2>
+        <form onSubmit={handleCreateBlog}>
+          <div className='flex flex-col text-left mb-5'>
+            <label className='font-bold mb-2' htmlFor='title'>
+              Title
+            </label>
+            <input
+              className='bg-gray-900 border border-zinc-500 rounded-lg py-2 px-4 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              id='title'
+              name='title'
+              {...title}
+            />
+          </div>
+          <div className='flex flex-col text-left mb-5'>
+            <label className='font-bold mb-2' htmlFor='author'>
+              Author
+            </label>
+            <input
+              className='bg-gray-900 border border-zinc-500 rounded-lg py-2 px-4 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              id='author'
+              name='author'
+              {...author}
+            />
+          </div>
+          <div className='flex flex-col text-left mb-5'>
+            <label className='font-bold mb-2' htmlFor='url'>
+              URL
+            </label>
+            <input
+              className='bg-gray-900 border border-zinc-500 rounded-lg py-2 px-4 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              id='url'
+              name='url'
+              {...url}
+            />
+          </div>
+          <button
+            id='save-blog-button'
+            className='w-full bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 flex justify-center items-center gap-2 font-bold'
+            type='submit'>
+            <CiCirclePlus className='h-5 w-5' />
+            Create
+          </button>
+        </form>
       </div>
     </div>
   )

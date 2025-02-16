@@ -6,8 +6,6 @@ import { getAllBlogs } from '../services/blogs'
 import { Link } from 'react-router-dom'
 import Togglable from './Togglable'
 import CreateNewBlog from './CreateNewBlog'
-import Container from 'react-bootstrap/esm/Container'
-import ListGroup from 'react-bootstrap/ListGroup'
 
 const BlogsList = () => {
   const [hideBlogForm, setHideBlogForm] = useState(false)
@@ -28,6 +26,10 @@ const BlogsList = () => {
     }
   })
 
+  useEffect(() => {
+    document.title = 'Blog List - Home'
+  }, [])
+
   if (query.isLoading) {
     return <div>Loading data...</div>
   }
@@ -45,25 +47,46 @@ const BlogsList = () => {
   }
 
   return (
-    <Container className='my-5'>
+    <div className='max-w-7xl px-5'>
       <Togglable buttonLabel='Create blog' hide={hideBlogForm}>
         <CreateNewBlog updater={handlerHide} />
       </Togglable>
 
-      <div className='blogs-main-container'>
+      <div className='mb-12'>
+        <h2 className='text-2xl font-bold mb-5'>Blogs</h2>
+        {blogs.length < 1 ? <p>No blogs yet...</p> : null}
+        <ul className='blogs-list'>
+          {blogs.map((blog) => (
+            <li
+              key={blog.id}
+              className='blog-container border border-zinc-700 rounded-lg my-5'>
+              <Link
+                to={`/blogs/${blog.id}`}
+                className='text-decoration-none hover:text-blue-500'>
+                <div className='py-4 px-6'>
+                  <p className='text-xl font-bold'>{blog.title}</p>
+                  <p className='text-zinc-400 text-sm'>by {blog.author}</p>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* <div className='blogs-main-container'>
         <h2>Blogs</h2>
         {blogs.length < 1 ? <p>No blogs yet...</p> : null}
-        <ListGroup as='ul'>
+        <ul>
           {blogs.map((blog) => (
-            <ListGroup.Item as='li' key={blog.id} className='blog-container'>
-              <Link to={`/blogs/${blog.id}`} className='text-decoration-none'>
+            <li key={blog.id} className='blog-container'>
+              <Link to={`/blogs/${blog.id}`}>
                 <b>{blog.title}</b>
               </Link>
-            </ListGroup.Item>
+            </li>
           ))}
-        </ListGroup>
-      </div>
-    </Container>
+        </ul>
+      </div> */}
+    </div>
   )
 }
 

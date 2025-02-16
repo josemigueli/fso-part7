@@ -5,9 +5,7 @@ import { useNotify } from '../NotificationContext'
 import { useUserLogin, useUserValue } from '../UserContext'
 import { useMutation } from '@tanstack/react-query'
 import { login } from '../services/login'
-import Container from 'react-bootstrap/esm/Container'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/esm/Button'
+import { CiLogin } from 'react-icons/ci'
 
 const LoginForm = () => {
   const [username, resetUsername] = useField()
@@ -42,35 +40,49 @@ const LoginForm = () => {
     }
   })
 
+  useEffect(() => {
+    document.title = 'Blog List - Login'
+  }, [])
+
   if (user) {
     return null
   }
 
   return (
-    <Container className='mt-5'>
-      <div className='justify-content-center row'>
-        <div className='p-4 p-lg-5 border border-light-subtle rounded col-lg-5'>
-          <h2 className='text-center'>Login</h2>
-          <Form onSubmit={handleLogin}>
-            <Form.Group className='mb-3'>
-              <Form.Label>Username</Form.Label>
-              <Form.Control id='username' {...username} />
-            </Form.Group>
-            <Form.Group className='mb-3'>
-              <Form.Label>Password</Form.Label>
-              <Form.Control id='password' {...password} />
-            </Form.Group>
-            <Button
-              variant='primary'
-              type='submit'
-              className='w-100'
-              id='login-button'>
-              Login
-            </Button>
-          </Form>
-        </div>
+    <div className='flex justify-center max-w-7xl px-5'>
+      <div className='border border-zinc-700 rounded-lg p-8 mb-12 md:w-md'>
+        <h2 className='text-center text-2xl font-bold mb-5'>Login</h2>
+        <form onSubmit={handleLogin}>
+          <div className='flex flex-col mb-5'>
+            <label className='font-bold mb-2' htmlFor='username'>
+              Username
+            </label>
+            <input
+              className='bg-gray-900 border border-zinc-500 rounded-lg py-2 px-4 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              id='username'
+              {...username}
+            />
+          </div>
+          <div className='flex flex-col mb-5'>
+            <label className='font-bold mb-2' htmlFor='password'>
+              Password
+            </label>
+            <input
+              className='bg-gray-900 border border-zinc-500 rounded-lg py-2 px-4 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              id='password'
+              {...password}
+            />
+          </div>
+          <button
+            type='submit'
+            id='login-button'
+            className='w-full bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 flex justify-center items-center gap-2 font-bold'>
+            <CiLogin className='w-5 h-5' />
+            Login
+          </button>
+        </form>
       </div>
-    </Container>
+    </div>
   )
 }
 

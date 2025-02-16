@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useUserValue } from '../UserContext'
 import PropTypes from 'prop-types'
-import Button from 'react-bootstrap/esm/Button'
+import { CiCirclePlus, CiCircleRemove } from 'react-icons/ci'
 
 const Togglable = (props) => {
   const [visible, setVisible] = useState(false)
@@ -26,18 +26,24 @@ const Togglable = (props) => {
 
   return (
     <div>
-      <div style={hideVisible} className='mb-3 text-end'>
-        <Button
-          variant='primary'
+      <div className='flex justify-end mb-5' style={hideVisible}>
+        <button
+          className='bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 mb-5 font-bold flex items-center gap-2'
           id='create-blog-button'
           onClick={toggleVisibility}>
+          <CiCirclePlus className='w-5 h-5' />
           {props.buttonLabel}
-        </Button>
+        </button>
       </div>
-      <div style={showVisible} className='mb-3 text-end'>
-        <Button className='mb-3' variant='secondary' onClick={toggleVisibility}>
-          Cancel
-        </Button>
+      <div className='mb-5' style={showVisible}>
+        <div className='flex justify-end'>
+          <button
+            className='bg-zinc-700 px-4 py-2 rounded-lg hover:bg-zinc-800 mb-5 flex items-center gap-2 font-bold'
+            onClick={toggleVisibility}>
+            <CiCircleRemove className='w-5 h-5' />
+            Cancel
+          </button>
+        </div>
         {props.children}
       </div>
     </div>
