@@ -72,20 +72,6 @@ const BlogsList = () => {
           ))}
         </ul>
       </div>
-
-      {/* <div className='blogs-main-container'>
-        <h2>Blogs</h2>
-        {blogs.length < 1 ? <p>No blogs yet...</p> : null}
-        <ul>
-          {blogs.map((blog) => (
-            <li key={blog.id} className='blog-container'>
-              <Link to={`/blogs/${blog.id}`}>
-                <b>{blog.title}</b>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div> */}
     </div>
   )
 }
