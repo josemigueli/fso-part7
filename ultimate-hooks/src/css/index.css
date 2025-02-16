@@ -1,0 +1,144 @@
+:root {
+  --background-one: #3c0366;
+  --background-two: #1e1a4d;
+  --background-two-light: rgba(49, 44, 133, 0.8);
+  --background-three: #020618;
+  --border: #372aac;
+  --border-hover: #4f39f6;
+  --text: #c6d2ff;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto', serif;
+}
+
+body {
+  margin: 20px;
+  color: var(--text);
+  background: linear-gradient(
+    to bottom right,
+    var(--background-one),
+    var(--background-two),
+    var(--background-three)
+  );
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.header-container {
+  text-align: center;
+}
+
+.notes-container,
+.persons-container {
+  margin-bottom: 40px;
+}
+
+.form-container,
+.persons-form-container {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.form-container form,
+.persons-form-container form {
+  padding: 20px 40px;
+  border: 1px solid var(--border-hover);
+  border-radius: 12px;
+  background-color: var(--background-two-light);
+}
+
+.form-container form textarea {
+  background-color: var(--background-two);
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  resize: vertical;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.form-container form textarea::placeholder {
+  color: var(--text);
+}
+
+.form-container form textarea:focus-visible {
+  outline: 2px solid var(--background-two);
+}
+
+.form-container form button,
+.persons-form-container form button {
+  padding: 5px 10px;
+  background-color: var(--background-two);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  width: 100%;
+}
+
+.persons-form-container form button {
+  margin-top: 10px;
+}
+
+.form-container form button:hover,
+.persons-form-container form button:hover {
+  background-color: var(--background-two-light);
+  border-color: var(--border-hover);
+}
+
+.note-item,
+.person-item {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  background-color: var(--background-two);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.person-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.input-container label {
+  margin-bottom: 5px;
+}
+
+.input-container input {
+  background-color: var(--background-two);
+  padding: 10px 15px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+}
+
+.input-container input::placeholder {
+  color: var(--text);
+}
+
+.input-container input:focus-visible {
+  outline: 2px solid var(--background-two);
+}
+
+@media (min-width: 768px) {
+  .form-container form {
+    width: 600px;
+  }
+
+  .persons-form-container form {
+    width: 600px;
+  }
+}
