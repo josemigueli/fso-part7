@@ -9,7 +9,7 @@ const Header = () => {
     <>
       <div className='border-b border-zinc-700 mb-5'>
         <div className='flex justify-between items-center max-w-7xl p-5'>
-          <Link to='/' className='text-xl font-bold'>
+          <Link to='/' className='text-xl font-bold' id='site-title'>
             Blog List
           </Link>
           {user ? <Dropdown /> : null}

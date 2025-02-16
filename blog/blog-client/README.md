@@ -1,1 +1,1 @@
-# Full Stack Open Course Part 7
+# Full Stack Open Course
